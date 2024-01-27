@@ -1,4 +1,4 @@
-name: Obfuscate code
+name: Obfuscate code 
 on: push
 permissions:
     contents: write
