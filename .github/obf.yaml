@@ -1,0 +1,23 @@
+name: Obfuscate code
+on: push
+permissions:
+    contents: write
+jobs:
+    obfuscate:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+            - uses: actions/setup-node@v2
+              with:
+                  node-version: "14"
+            - name: Grab obfuscator from npm
+              run: npm install --save-dev javascript-obfuscator
+            - name: Do the obfuscation
+              run: npx javascript-obfuscator jscredit.js --output jscredit-obfuscated.js
+            - name: Commit changes
+              run: |
+                  git config --local user.email "action@github.com"
+                  git config --local user.name "GitHub Action"
+                  git add jscredit-obfuscated.js
+                  git commit -m "Obfuscate code for commit $(git log -l --pretty=%B)"
+                  git push
